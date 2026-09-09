@@ -1,5 +1,5 @@
 -- Replace with your desktop's IP or Ngrok URL
-local url = "https://mg4fbsm9-8080.uks1.devtunnels.ms/" 
+local url = "wss://mg4fbsm9-8080.uks1.devtunnels.ms/" 
 
 print("Connecting to Swarm Commander...")
 local ws, err = http.websocket(url) 
