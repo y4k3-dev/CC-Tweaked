@@ -1,4 +1,4 @@
-local repo = "https://github.com/y4k3-dev/CC-Tweaked.git"
+local repo = "y4k3-dev/CC-Tweaked"
 local branch = "main"
 local folder = "CC-Tweaked"
 
