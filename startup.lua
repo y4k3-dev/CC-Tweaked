@@ -1,7 +1,9 @@
+::retry::
+
 -- Replace with your desktop's IP or Ngrok URL
 local url = "wss://mg4fbsm9-8080.uks1.devtunnels.ms/" 
 
-print("Connecting to Swarm Commander...")
+print("Connecting...")
 local ws, err = http.websocket(url) 
 
 -- The API returns false and an error string if the connection fails
@@ -13,6 +15,9 @@ end
 print("Connected! Awaiting instructions.")
 
 while true do
+
+    
+
     -- receive() returns the string message, or nil if the connection drops
     local message, isBinary = ws.receive() 
     
@@ -27,7 +32,11 @@ while true do
             print("Syntax Error: " .. tostring(syntax_err))
         end
     else
+
         print("Connection closed by server.")
+        goto retry
+
+        
         break
     end
 end
