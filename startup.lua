@@ -1,24 +1,28 @@
-::retry::
-
--- Replace with your desktop's IP or Ngrok URL
 local url = "wss://mg4fbsm9-8080.uks1.devtunnels.ms/" 
 
 print("Connecting...")
 local ws, err = http.websocket(url) 
 
--- The API returns false and an error string if the connection fails
 if not ws then 
     print("Connection failed: " .. tostring(err))
     return
 end
 
-print("Connected! Awaiting instructions.")
+print("Connected!")
+
+-- 1. Gather hardware stats
+local handshake = {
+    type = "handshake",
+    id = os.getComputerID(),
+    label = os.getComputerLabel() or ("turtle_" .. os.getComputerID()),
+    fuel = turtle.getFuelLevel(),
+    fuelLimit = turtle.getFuelLimit()
+}
+
+ws.send(textutils.serializeJSON(handshake))
+print("Handshake sent! Awaiting instructions.")
 
 while true do
-
-    
-
-    -- receive() returns the string message, or nil if the connection drops
     local message, isBinary = ws.receive() 
     
     if message then
@@ -28,15 +32,20 @@ while true do
             if not success then
                 print("Error running command: " .. tostring(run_err))
             end
+            
+            -- Optional: Report updated fuel back after every command
+            local report = {
+                type = "status",
+                id = os.getComputerID(),
+                fuel = turtle.getFuelLevel(),
+                success = success
+            }
+            ws.send(textutils.serializeJSON(report))
         else
             print("Syntax Error: " .. tostring(syntax_err))
         end
     else
-
         print("Connection closed by server.")
-        goto retry
-
-        
         break
     end
 end
