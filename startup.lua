@@ -51,3 +51,5 @@ while true do
 end
 
 if ws then ws.close() end
+
+print("done")
